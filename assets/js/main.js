@@ -1,299 +1,237 @@
-// DOM Elements
-const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-const mobileMenu = document.getElementById('mobile-menu');
-const navLinks = document.querySelectorAll('.nav-link');
-const header = document.querySelector('header');
-const sections = document.querySelectorAll('section');
-const skillItems = document.querySelectorAll('.skill-item');
-const projectCards = document.querySelectorAll('.project-card');
-const contactForm = document.getElementById('contact-form');
+// --- PARTIE 1 : PHOTO QUI SE REPLIE (LOGIQUE AJUSTÉE) ---
+const photoContainer = document.getElementById('photo-container');
 
-// Mobile Menu Toggle
-mobileMenuBtn?.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    mobileMenuBtn.querySelector('i').classList.toggle('fa-bars');
-    mobileMenuBtn.querySelector('i').classList.toggle('fa-times');
-});
-
-// Close mobile menu when clicking on a link
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        mobileMenuBtn.querySelector('i').classList.add('fa-bars');
-        mobileMenuBtn.querySelector('i').classList.remove('fa-times');
-    });
-});
-
-// Header scroll effect
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        header.classList.add('scrolled');
+    const scrollY = window.scrollY;
+    
+    // On commence à réduire après 50px de scroll pour laisser le temps de voir la photo
+    if (scrollY > 50) {
+        const maxScroll = 300; // Distance de scroll pour disparition complète
+        const percentage = Math.max(0, 1 - ((scrollY - 50) / maxScroll));
+        
+        photoContainer.style.opacity = percentage;
+        // Effet de rétrécissement (Scale) et remontée (TranslateY)
+        photoContainer.style.transform = `scale(${0.8 + (percentage * 0.2)}) translateY(-${(scrollY - 50) / 2}px)`;
+        
+        // On cache complètement si invisible pour la performance
+        if (percentage <= 0) {
+            photoContainer.style.visibility = 'hidden';
+            photoContainer.style.height = '0px'; // On réduit la hauteur pour remonter le contenu
+            photoContainer.style.marginTop = '0px';
+        } else {
+            photoContainer.style.visibility = 'visible';
+            photoContainer.style.height = 'auto';
+        }
     } else {
-        header.classList.remove('scrolled');
+        // État initial (Grand)
+        photoContainer.style.opacity = 1;
+        photoContainer.style.transform = 'scale(1) translateY(0)';
+        photoContainer.style.visibility = 'visible';
+        photoContainer.style.height = 'auto';
+        photoContainer.style.marginTop = '4rem'; // mt-16
     }
 });
 
-// Active navigation link
-function updateActiveNav() {
-    const scrollPosition = window.scrollY + 100;
-    
-    navLinks.forEach(link => {
-        const targetId = link.getAttribute('href').substring(1);
-        const targetSection = document.getElementById(targetId);
+// --- PARTIE 2 : FOOTER SCANNER (CONTACTS) ---
+
+// Tes données de contact
+const SOCIAL_CARDS = [
+    {
+        title: "GITHUB",
+        subtitle: "Code Source",
+        icon: "fab fa-github",
+        color: "#ffffff", 
+        link: "https://github.com",
+        desc: "Repos"
+    },
+    {
+        title: "LINKEDIN",
+        subtitle: "Pro",
+        icon: "fab fa-linkedin",
+        color: "#e5e7eb", 
+        link: "https://linkedin.com",
+        desc: "Connect"
+    },
+    {
+        title: "EMAIL",
+        subtitle: "Contact",
+        icon: "fas fa-envelope",
+        color: "#d1d5db", 
+        link: "mailto:tonemail@gmail.com",
+        desc: "Write me"
+    },
+    {
+        title: "WHATSAPP",
+        subtitle: "Chat",
+        icon: "fab fa-whatsapp",
+        color: "#25D366", 
+        link: "#",
+        desc: "Message"
+    }
+];
+
+class CardStreamController {
+    constructor() {
+        this.container = document.getElementById("cardStream");
+        this.cardLine = document.getElementById("cardLine");
+        this.position = 0;
+        this.velocity = 50; // Vitesse de défilement
+        this.direction = -1; // Vers la gauche
+        this.isDragging = false;
         
-        if (targetSection) {
-            const sectionTop = targetSection.offsetTop;
-            const sectionHeight = targetSection.offsetHeight;
-            
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-            }
-        }
-    });
-}
-
-// Intersection Observer for animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            
-            // Animate skill bars when skills section is visible
-            if (entry.target.classList.contains('skill-item')) {
-                const bar = entry.target.querySelector('[style*="width"]');
-                if (bar) {
-                    const width = bar.style.width;
-                    bar.style.width = '0';
-                    setTimeout(() => {
-                        bar.style.width = width;
-                    }, 100);
-                }
-            }
-        }
-    });
-}, observerOptions);
-
-// Observe elements for animation
-sections.forEach(section => observer.observe(section));
-skillItems.forEach(item => observer.observe(item));
-projectCards.forEach(card => observer.observe(card));
-
-// Typing effect for hero section
-function typeWriter(element, text, speed = 100) {
-    let i = 0;
-    element.innerHTML = '';
-    
-    function type() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
+        // On lance seulement si les éléments existent dans le DOM
+        if(this.cardLine && this.container) {
+            this.init();
+        } else {
+            console.error("Erreur: Éléments du footer introuvables");
         }
     }
-    
-    type();
-}
 
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.getElementById('accueil');
-    
-    if (hero) {
-        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+    init() {
+        this.populateCardLine();
+        this.setupEventListeners();
+        this.animate();
     }
-});
 
-// Smooth scroll for navigation links
-navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href').substring(1);
-        const targetSection = document.getElementById(targetId);
+    populateCardLine() {
+        this.cardLine.innerHTML = "";
+        // On duplique les cartes 4 fois pour être sûr que ça couvre l'écran
+        const cardsToRender = [...SOCIAL_CARDS, ...SOCIAL_CARDS, ...SOCIAL_CARDS, ...SOCIAL_CARDS];
         
-        if (targetSection) {
-            const offsetTop = targetSection.offsetTop - 80;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// Form submission
-contactForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(contactForm);
-    const name = formData.get('name') || contactForm.querySelector('input[type="text"]').value;
-    const email = formData.get('email') || contactForm.querySelector('input[type="email"]').value;
-    const message = formData.get('message') || contactForm.querySelector('textarea').value;
-    
-    // Simple validation
-    if (!name || !email || !message) {
-        showNotification('Veuillez remplir tous les champs', 'error');
-        return;
-    }
-    
-    // Show loading state
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<span class="loading"></span> Envoi en cours...';
-    submitBtn.disabled = true;
-    
-    // Simulate form submission (replace with actual implementation)
-    setTimeout(() => {
-        showNotification('Message envoyé avec succès!', 'success');
-        contactForm.reset();
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    }, 2000);
-});
-
-// Notification system
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `fixed top-20 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
-    
-    // Set color based on type
-    const colors = {
-        success: 'bg-green-500 text-white',
-        error: 'bg-red-500 text-white',
-        info: 'bg-blue-500 text-white'
-    };
-    
-    notification.classList.add(...colors[type].split(' '));
-    notification.innerHTML = `
-        <div class="flex items-center space-x-2">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-            <span>${message}</span>
-        </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 3000);
-}
-
-// Project card hover effects
-projectCards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-10px) scale(1.02)';
-    });
-    
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0) scale(1)';
-    });
-});
-
-// Skill bar animation on scroll
-function animateSkillBars() {
-    skillItems.forEach(item => {
-        const rect = item.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        
-        if (isVisible && !item.classList.contains('animated')) {
-            item.classList.add('animated');
-            const bar = item.querySelector('[style*="width"]');
-            if (bar) {
-                const width = bar.style.width;
-                bar.style.width = '0';
-                setTimeout(() => {
-                    bar.style.width = width;
-                }, 100);
-            }
-        }
-    });
-}
-
-// Initialize animations on page load
-document.addEventListener('DOMContentLoaded', () => {
-    // Update active nav on scroll
-    window.addEventListener('scroll', updateActiveNav);
-    updateActiveNav();
-    
-    // Animate skill bars
-    window.addEventListener('scroll', animateSkillBars);
-    animateSkillBars();
-    
-    // Add hover effects to social links
-    const socialLinks = document.querySelectorAll('.fab');
-    socialLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            link.style.transform = 'translateY(-3px) rotate(5deg)';
+        cardsToRender.forEach((data) => {
+            const wrapper = this.createCardWrapper(data);
+            this.cardLine.appendChild(wrapper);
         });
-        
-        link.addEventListener('mouseleave', () => {
-            link.style.transform = 'translateY(0) rotate(0deg)';
-        });
-    });
-    
-    // Initialize typing effect for hero title (optional)
-    const heroTitle = document.querySelector('#accueil h1 .text-blue-600');
-    if (heroTitle) {
-        const originalText = heroTitle.textContent;
-        typeWriter(heroTitle, originalText, 150);
     }
-});
 
-// Performance optimization - Debounce scroll events
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
+    createCardWrapper(data) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "card-wrapper";
+        
+        // Carte Normale (Visible par défaut)
+        const normalCard = document.createElement("div");
+        normalCard.className = "card card-normal";
+        normalCard.innerHTML = `
+            <div class="text-3xl mb-2" style="color: ${data.color}">
+                <i class="${data.icon}"></i>
+            </div>
+            <h3 class="text-sm font-bold text-white tracking-widest">${data.title}</h3>
+            <p class="text-gray-500 text-[10px] mt-1 font-mono">${data.subtitle}</p>
+        `;
+        
+        // Clic sur la carte
+        normalCard.onclick = () => {
+            if(!this.isDragging) window.open(data.link, '_blank');
         };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
 
-// Apply debounce to scroll events
-window.addEventListener('scroll', debounce(() => {
-    updateActiveNav();
-    animateSkillBars();
-}, 100));
+        // Carte ASCII (Visible quand scanné)
+        const asciiCard = document.createElement("div");
+        asciiCard.className = "card card-ascii";
+        const asciiContent = document.createElement("div");
+        asciiContent.className = "ascii-content";
+        asciiContent.textContent = this.generateCode(30, 20); 
+        asciiCard.appendChild(asciiContent);
 
-// Dark mode toggle (optional enhancement)
-function toggleDarkMode() {
-    document.body.classList.toggle('dark');
-    localStorage.setItem('darkMode', document.body.classList.contains('dark'));
-}
+        wrapper.appendChild(normalCard);
+        wrapper.appendChild(asciiCard);
 
-// Check for saved dark mode preference
-if (localStorage.getItem('darkMode') === 'true') {
-    document.body.classList.add('dark');
-}
-
-// Add keyboard navigation
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-        mobileMenu.classList.add('hidden');
-        mobileMenuBtn.querySelector('i').classList.add('fa-bars');
-        mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+        return wrapper;
     }
-});
 
-// Console welcome message
-console.log('%c🚀 Portfolio chargé avec succès!', 'color: #2563eb; font-size: 16px; font-weight: bold;');
-console.log('%cBienvenue sur mon portfolio! N\'hésitez pas à explorer mes projets.', 'color: #64748b; font-size: 12px;');
+    generateCode(w, h) {
+        const chars = "01.|:;*=+-_ABDOULAYE"; // Un peu de personnalisation
+        let out = "";
+        for(let i=0; i<h; i++) {
+            for(let j=0; j<w; j++) {
+                out += chars[Math.floor(Math.random() * chars.length)];
+            }
+            out += "\n";
+        }
+        return out;
+    }
+
+    setupEventListeners() {
+        this.cardLine.addEventListener("mousedown", () => this.isDragging = true);
+        window.addEventListener("mouseup", () => this.isDragging = false);
+        window.addEventListener("mousemove", (e) => {
+            if(this.isDragging) {
+                this.position += e.movementX;
+                this.cardLine.style.transform = `translateX(${this.position}px)`;
+            }
+        });
+    }
+
+    animate() {
+        if(!this.isDragging) {
+            this.position += this.velocity * this.direction * 0.016;
+            
+            // Reset position pour boucle infinie fluide
+            // On reset quand on a défilé d'un tiers de la longueur totale
+            const totalWidth = this.cardLine.scrollWidth / 3; 
+            if (Math.abs(this.position) > totalWidth) {
+                this.position = 0;
+            }
+        }
+        
+        this.cardLine.style.transform = `translateX(${this.position}px)`;
+        this.updateCardClipping();
+        requestAnimationFrame(() => this.animate());
+    }
+
+    updateCardClipping() {
+        // Centre de l'écran (Scanner)
+        const scannerX = this.container.offsetWidth / 2;
+        const wrappers = document.querySelectorAll(".card-wrapper");
+        
+        wrappers.forEach(wrapper => {
+            const rect = wrapper.getBoundingClientRect();
+            const cardLeft = rect.left;
+            const cardWidth = rect.width;
+            
+            const normalCard = wrapper.querySelector(".card-normal");
+            const asciiCard = wrapper.querySelector(".card-ascii");
+            
+            // Si la carte passe sous le scanner (au centre)
+            if (cardLeft < scannerX && (cardLeft + cardWidth) > scannerX) {
+                const intersect = scannerX - cardLeft;
+                const percentage = (intersect / cardWidth) * 100;
+                
+                // Effet de révélation (Clip Path)
+                normalCard.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+                asciiCard.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            } else if ((cardLeft + cardWidth) < scannerX) {
+                // Déjà passé (Gauche) -> Tout noir/ASCII ou Reset
+                normalCard.style.clipPath = `inset(0 0 0 100%)`;
+                asciiCard.style.clipPath = `inset(0 0 0 0)`;
+            } else {
+                // Pas encore passé (Droite) -> Normal
+                normalCard.style.clipPath = `inset(0 0 0 0)`;
+                asciiCard.style.clipPath = `inset(0 100% 0 0)`;
+            }
+        });
+    }
+}
+
+// Initialisation
+document.addEventListener("DOMContentLoaded", () => {
+    // Menu Mobile
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const navUl = document.querySelector('nav ul');
+    
+    if(mobileBtn) {
+        mobileBtn.addEventListener('click', () => {
+            navUl.classList.toggle('hidden');
+            navUl.classList.toggle('flex');
+            navUl.classList.toggle('flex-col');
+            navUl.classList.toggle('absolute');
+            navUl.classList.toggle('top-16');
+            navUl.classList.toggle('left-0');
+            navUl.classList.toggle('w-full');
+            navUl.classList.toggle('bg-white');
+            navUl.classList.toggle('border-b');
+        });
+    }
+
+    // Lancement du Footer Scanner
+    new CardStreamController();
+});

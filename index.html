@@ -1,389 +1,326 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Portfolio - Développeur Web</title>
+    <title>Portfolio • Abdoulaye Ba</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js est nécessaire pour le footer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'paper': '#f3f4f6',     
+                        'ink': '#111111',       
+                        'graphite': '#4b5563',  
+                        'accent': '#2563eb',    
+                    },
+                    fontFamily: {
+                        'mono': ['DepartureMono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-50 text-gray-800">
-    <!-- Header / Navigation -->
-    <header class="fixed top-0 w-full bg-white shadow-md z-50">
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="text-2xl font-bold text-blue-600">
-                    <span class="animate-pulse">Portfolio</span>
+<body class="bg-paper text-ink font-mono overflow-x-hidden selection:bg-ink selection:text-white">
+
+    <!-- TEXTURE DE FOND -->
+    <div class="fixed inset-0 pointer-events-none opacity-[0.04] z-0" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
+
+    <!-- HEADER NAVIGATION -->
+    <header class="fixed top-0 w-full z-50 bg-paper/90 backdrop-blur-md border-b border-ink/10">
+        <div class="container mx-auto">
+            <nav class="flex justify-between items-center h-16 px-6">
+                <!-- NOM COMPLET (Spécifique Header) -->
+                <div class="text-sm md:text-lg font-bold tracking-tighter border-2 border-ink px-3 py-1 bg-white hover:bg-ink hover:text-white transition-colors cursor-default">
+                    ABDOULAYE ONOKOKO BA
                 </div>
-                <ul class="hidden md:flex space-x-8">
-                    <li><a href="#accueil" class="nav-link hover:text-blue-600 transition-colors">Accueil</a></li>
-                    <li><a href="#a-propos" class="nav-link hover:text-blue-600 transition-colors">À propos</a></li>
-                    <li><a href="#formation" class="nav-link hover:text-blue-600 transition-colors">Formation</a></li>
-                    <li><a href="#experience" class="nav-link hover:text-blue-600 transition-colors">Expérience</a></li>
-                    <li><a href="#competences" class="nav-link hover:text-blue-600 transition-colors">Compétences</a></li>
-                    <li><a href="#projets" class="nav-link hover:text-blue-600 transition-colors">Projets</a></li>
-                    <li><a href="#contact" class="nav-link hover:text-blue-600 transition-colors">Contact</a></li>
+                
+                <ul class="hidden md:flex space-x-0 border-l border-ink/10">
+                    <li><a href="#accueil" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">01. Accueil</a></li>
+                    <li><a href="#profil" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">02. Profil</a></li>
+                    <li><a href="#parcours" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">03. Parcours</a></li>
+                    <li><a href="#competences" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">04. Stack</a></li>
+                    <li><a href="#projets" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">05. Travaux</a></li>
                 </ul>
-                <button id="mobile-menu-btn" class="md:hidden">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden mt-4">
-                <ul class="space-y-2">
-                    <li><a href="#accueil" class="block py-2 hover:text-blue-600">Accueil</a></li>
-                    <li><a href="#a-propos" class="block py-2 hover:text-blue-600">À propos</a></li>
-                    <li><a href="#formation" class="block py-2 hover:text-blue-600">Formation</a></li>
-                    <li><a href="#experience" class="block py-2 hover:text-blue-600">Expérience</a></li>
-                    <li><a href="#competences" class="block py-2 hover:text-blue-600">Compétences</a></li>
-                    <li><a href="#projets" class="block py-2 hover:text-blue-600">Projets</a></li>
-                    <li><a href="#contact" class="block py-2 hover:text-blue-600">Contact</a></li>
-                </ul>
-            </div>
-        </nav>
+                <button id="mobile-menu-btn" class="md:hidden text-xl"><i class="fas fa-bars"></i></button>
+            </nav>
+        </div>
     </header>
 
-    <!-- Section Présentation (Hero) -->
-    <section id="accueil" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 pt-16">
-        <div class="container mx-auto px-6 text-center">
-            <div class="hero-content">
-                <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
-                    Bonjour, je suis <span class="text-blue-600">[Votre Nom]</span>
-                </h1>
-                <p class="text-xl md:text-2xl mb-8 text-gray-600 animate-slide-up">
-                    Développeur Web passionné par la création d'expériences digitales
-                </p>
-                <div class="space-x-4 animate-fade-in-delay">
-                    <a href="#contact" class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transform hover:scale-105 transition-all">
-                        Me contacter
-                    </a>
-                    <a href="#projets" class="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-full hover:bg-blue-600 hover:text-white transform hover:scale-105 transition-all">
-                        Voir mes projets
-                    </a>
+    <!-- SECTION PHOTO (Rétractable - TAILLE AUGMENTÉE) -->
+    <div id="photo-container" class="mt-16 w-full bg-white border-b border-ink/10 overflow-hidden transition-all duration-300 relative z-10">
+        <div class="container mx-auto py-8 flex flex-col items-center justify-center">
+            <div class="relative p-2 border border-ink/20 bg-paper shadow-lg transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                <!-- Dimensions augmentées ici : w-48 h-64 (mobile) et w-64 h-80 (desktop) -->
+                <div class="w-48 h-64 md:w-64 md:h-80 overflow-hidden bg-gray-200 relative">
+                    <img src="assets/images/me.jpg" alt="Portrait" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                    <!-- Overlay Scanline -->
+                    <div class="absolute inset-0 bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAADCAYAAABS3WWCAAAAE0lEQVQIW2NkYGD4zwABjFAQAwAwMQH/2OC5CAAAAABJRU5ErkJggg==')] opacity-20 pointer-events-none"></div>
+                </div>
+                <div class="mt-2 flex justify-between items-end">
+                    <div>
+                        <p class="text-[10px] text-graphite uppercase">Role</p>
+                        <p class="text-xs font-bold">FRONTEND DEV</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-graphite uppercase">ID</p>
+                        <p class="text-xs font-bold">SN-2026</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Section À propos -->
-    <section id="a-propos" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 text-blue-600">À propos de moi</h2>
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
-                    <p class="text-lg leading-relaxed text-gray-700">
-                        Passionné par le développement web depuis plusieurs années, je combine créativité et expertise technique pour créer des solutions digitales modernes et performantes.
+    <main class="relative z-10">
+        
+        <!-- SECTION HERO -->
+        <section id="accueil" class="min-h-[70vh] flex items-center relative border-b border-ink/10 bg-paper overflow-hidden">
+            <div class="absolute right-0 bottom-0 w-1/2 md:w-1/3 opacity-80 mix-blend-multiply pointer-events-none z-0">
+                <img src="assets/images/transhumans/astro.png" alt="Graphic" class="w-full h-auto">
+            </div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-3xl">
+                    <div class="inline-block bg-ink text-white text-xs px-2 py-1 mb-6 uppercase tracking-widest">
+                        Étudiant & Développeur Web
+                    </div>
+                    <h1 class="text-5xl md:text-8xl font-bold mb-8 leading-none tracking-tighter">
+                        CONCEVOIR<br>
+                        L'INTERFACE<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-ink to-gray-500">DE DEMAIN.</span>
+                    </h1>
+                    <p class="text-lg text-graphite max-w-lg leading-relaxed bg-paper/80 backdrop-blur-sm p-4 border-l-2 border-ink">
+                        Je suis <span class="font-bold text-ink">Abdoulaye Ba</span>. Je transforme des concepts complexes en interfaces web fluides, performantes et minimalistes.
                     </p>
-                    <p class="text-lg leading-relaxed text-gray-700">
-                        Ma démarche est axée sur l'apprentissage continu et l'innovation, ce qui me permet de maîtriser les dernières technologies et meilleures pratiques du secteur.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-blue-600 hover:text-blue-800 transition-colors">
-                            <i class="fab fa-linkedin text-2xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-800 hover:text-gray-600 transition-colors">
-                            <i class="fab fa-github text-2xl"></i>
-                        </a>
-                        <a href="#" class="text-blue-400 hover:text-blue-600 transition-colors">
-                            <i class="fab fa-twitter text-2xl"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="flex justify-center">
-                    <div class="w-64 h-64 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-full flex items-center justify-center text-white text-6xl font-bold shadow-xl">
-                        Photo
+                    <div class="mt-10 flex gap-4">
+                        <a href="#projets" class="px-8 py-4 bg-ink text-white text-sm hover:bg-accent transition-colors font-bold">VOIR MES PROJETS</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Section Formation -->
-    <section id="formation" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 text-blue-600">Formation</h2>
-            <div class="max-w-4xl mx-auto space-y-8">
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-semibold">[Diplôme/Formation]</h3>
-                        <span class="text-blue-600 font-medium">[Années]</span>
-                    </div>
-                    <p class="text-gray-600 mb-2">[Établissement]</p>
-                    <p class="text-gray-700">[Description de la formation et compétences acquises]</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-semibold">[Diplôme/Formation]</h3>
-                        <span class="text-blue-600 font-medium">[Années]</span>
-                    </div>
-                    <p class="text-gray-600 mb-2">[Établissement]</p>
-                    <p class="text-gray-700">[Description de la formation et compétences acquises]</p>
-                </div>
+        <!-- SECTION PROFIL -->
+        <section id="profil" class="py-24 bg-white border-b border-ink/10 relative">
+            <div class="absolute left-10 top-20 w-32 opacity-20 mix-blend-multiply pointer-events-none">
+                <img src="assets/images/transhumans/waiting.png" alt="Graphic">
             </div>
-        </div>
-    </section>
 
-    <!-- Section Expériences professionnelles -->
-    <section id="experience" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 text-blue-600">Expériences professionnelles</h2>
-            <div class="max-w-4xl mx-auto space-y-8">
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-semibold">[Poste]</h3>
-                        <span class="text-blue-600 font-medium">[Période]</span>
-                    </div>
-                    <p class="text-gray-600 mb-2">[Entreprise]</p>
-                    <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>[Mission ou réalisation 1]</li>
-                        <li>[Mission ou réalisation 2]</li>
-                        <li>[Mission ou réalisation 3]</li>
-                    </ul>
+            <div class="container mx-auto px-6">
+                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 pb-4">
+                    <span class="text-4xl font-bold">02.</span>
+                    <h2 class="text-xl uppercase tracking-widest">Fiche Profil</h2>
                 </div>
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-semibold">[Poste]</h3>
-                        <span class="text-blue-600 font-medium">[Période]</span>
-                    </div>
-                    <p class="text-gray-600 mb-2">[Entreprise]</p>
-                    <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>[Mission ou réalisation 1]</li>
-                        <li>[Mission ou réalisation 2]</li>
-                        <li>[Mission ou réalisation 3]</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Section Compétences -->
-    <section id="competences" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 text-blue-600">Compétences</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center">
-                    <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-code text-blue-600 text-2xl"></i>
+                <div class="grid md:grid-cols-12 gap-12">
+                    <div class="md:col-span-7 space-y-6 text-graphite text-justify">
+                        <p class="text-xl text-ink font-bold">"La rigueur du code au service de la créativité."</p>
+                        <p>Passionné par le numérique, je combine mes études avec une pratique intensive du développement web. Mon objectif est de maîtriser l'ensemble de la chaîne de production, de la conception graphique (UI) à l'intégration technique.</p>
+                        <p>Curieux et autodidacte, j'explore constamment de nouvelles technologies pour rester à jour dans un domaine en perpétuelle évolution.</p>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4">Développement Frontend</h3>
-                    <div class="space-y-2">
-                        <div class="skill-item">
-                            <span class="text-gray-700">HTML/CSS</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-blue-600 h-2 rounded-full" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="text-gray-700">JavaScript</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-blue-600 h-2 rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="text-gray-700">React/Vue</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-blue-600 h-2 rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-server text-green-600 text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4">Développement Backend</h3>
-                    <div class="space-y-2">
-                        <div class="skill-item">
-                            <span class="text-gray-700">Node.js</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-green-600 h-2 rounded-full" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="text-gray-700">Python</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-green-600 h-2 rounded-full" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="text-gray-700">Base de données</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-green-600 h-2 rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-tools text-purple-600 text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4">Outils & Autres</h3>
-                    <div class="space-y-2">
-                        <div class="skill-item">
-                            <span class="text-gray-700">Git/GitHub</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-purple-600 h-2 rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="text-gray-700">Figma/Design</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-purple-600 h-2 rounded-full" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="text-gray-700">Agile/Scrum</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                                <div class="bg-purple-600 h-2 rounded-full" style="width: 75%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Section Projets -->
-    <section id="projets" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 text-blue-600">Projets</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="project-card bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all transform hover:scale-105">
-                    <div class="h-48 bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center">
-                        <i class="fas fa-shopping-cart text-white text-4xl"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Projet E-commerce</h3>
-                        <p class="text-gray-600 mb-4">Site e-commerce moderne avec panier, paiement et gestion des produits. Utilisation de React et Node.js.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">React</span>
-                            <span class="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm">Node.js</span>
-                            <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm">MongoDB</span>
-                        </div>
-                        <div class="flex space-x-4">
-                            <a href="#" class="text-blue-600 hover:text-blue-800">
-                                <i class="fas fa-external-link-alt"></i> Voir le projet
-                            </a>
-                            <a href="#" class="text-gray-800 hover:text-gray-600">
-                                <i class="fab fa-github"></i> Code source
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all transform hover:scale-105">
-                    <div class="h-48 bg-gradient-to-br from-green-400 to-teal-600 flex items-center justify-center">
-                        <i class="fas fa-tasks text-white text-4xl"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Application de Gestion de Tâches</h3>
-                        <p class="text-gray-600 mb-4">Application web pour la gestion de tâches avec drag & drop, notifications et collaboration en temps réel.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">Vue.js</span>
-                            <span class="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm">Firebase</span>
-                            <span class="px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-sm">Tailwind</span>
-                        </div>
-                        <div class="flex space-x-4">
-                            <a href="#" class="text-blue-600 hover:text-blue-800">
-                                <i class="fas fa-external-link-alt"></i> Voir le projet
-                            </a>
-                            <a href="#" class="text-gray-800 hover:text-gray-600">
-                                <i class="fab fa-github"></i> Code source
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Contact -->
-    <section id="contact" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 text-blue-600">Contact</h2>
-            <div class="max-w-4xl mx-auto">
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div class="space-y-6">
-                        <h3 class="text-2xl font-semibold mb-4">Parlons de votre projet</h3>
-                        <p class="text-gray-600">
-                            Je suis toujours intéressé par de nouveaux défis et opportunités. N'hésitez pas à me contacter pour discuter de vos projets ou pour toute collaboration.
-                        </p>
-                        <div class="space-y-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-envelope text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <p class="font-semibold">Email</p>
-                                    <p class="text-gray-600">votre.email@example.com</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-phone text-green-600"></i>
-                                </div>
-                                <div>
-                                    <p class="font-semibold">Téléphone</p>
-                                    <p class="text-gray-600">+33 6 XX XX XX XX</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <div class="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-map-marker-alt text-purple-600"></i>
-                                </div>
-                                <div>
-                                    <p class="font-semibold">Localisation</p>
-                                    <p class="text-gray-600">Ville, France</p>
+                    <div class="md:col-span-5">
+                        <div class="border-2 border-ink p-1 bg-paper">
+                            <div class="bg-white border border-ink/20 p-6">
+                                <h3 class="font-bold mb-6 border-b-2 border-ink pb-2 inline-block">DONNÉES PERSONNELLES</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 pb-2">
+                                        <span class="text-xs text-graphite uppercase">Nom Complet</span>
+                                        <span class="font-bold">Abdoulaye Ba</span>
+                                    </div>
+                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 pb-2">
+                                        <span class="text-xs text-graphite uppercase">Date de Naissance</span>
+                                        <span class="font-bold">[JJ/MM/AAAA]</span>
+                                    </div>
+                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 pb-2">
+                                        <span class="text-xs text-graphite uppercase">Âge</span>
+                                        <span class="font-bold">[XX] Ans</span>
+                                    </div>
+                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 pb-2">
+                                        <span class="text-xs text-graphite uppercase">Nationalité</span>
+                                        <span class="font-bold">Sénégalaise</span>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-2">
+                                        <span class="text-xs text-graphite uppercase">Statut</span>
+                                        <span class="font-bold text-accent">Étudiant / Freelance</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <form id="contact-form" class="space-y-4">
-                            <div>
-                                <label class="block text-gray-700 mb-2">Nom</label>
-                                <input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION PARCOURS -->
+        <section id="parcours" class="py-24 bg-paper border-b border-ink/10 overflow-hidden">
+            <div class="container mx-auto px-6">
+                <div class="flex items-baseline gap-4 mb-16 border-b border-ink/10 pb-4">
+                    <span class="text-4xl font-bold">03.</span>
+                    <h2 class="text-xl uppercase tracking-widest">Parcours</h2>
+                </div>
+
+                <div class="relative max-w-4xl mx-auto">
+                    <div class="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-px bg-ink/30 md:-translate-x-1/2"></div>
+
+                    <!-- Item 1 -->
+                    <div class="relative flex flex-col md:flex-row items-center mb-16 group">
+                        <div class="md:w-1/2 md:pr-12 md:text-right pl-16 md:pl-0 mb-4 md:mb-0 w-full">
+                            <span class="text-4xl font-bold text-ink/20 group-hover:text-ink transition-colors duration-500">2025-2026</span>
+                        </div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 bg-paper border-2 border-ink rounded-full flex items-center justify-center z-10 shadow-lg">
+                            <div class="w-1/2 h-0.5 bg-ink origin-left rotate-45 transform group-hover:rotate-180 transition-transform duration-700"></div>
+                            <div class="absolute w-2 h-2 bg-ink rounded-full"></div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12 pl-16 w-full">
+                            <div class="bg-white p-6 border border-ink/10 hover:border-ink transition-all shadow-sm">
+                                <h3 class="font-bold text-lg">[Nom Formation Actuelle]</h3>
+                                <p class="text-sm text-accent mb-2">[Établissement]</p>
+                                <p class="text-xs text-graphite">En cours d'acquisition.</p>
                             </div>
-                            <div>
-                                <label class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="relative flex flex-col md:flex-row items-center mb-16 group">
+                        <div class="md:w-1/2 md:pr-12 md:text-right pl-16 md:pl-0 mb-4 md:mb-0 w-full md:order-1">
+                            <div class="bg-white p-6 border border-ink/10 hover:border-ink transition-all shadow-sm">
+                                <h3 class="font-bold text-lg">[Diplôme Précédent]</h3>
+                                <p class="text-sm text-accent mb-2">[Établissement]</p>
+                                <p class="text-xs text-graphite">Obtention du diplôme.</p>
                             </div>
-                            <div>
-                                <label class="block text-gray-700 mb-2">Message</label>
-                                <textarea required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                                Envoyer le message
-                            </button>
-                        </form>
+                        </div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 bg-paper border-2 border-ink rounded-full flex items-center justify-center z-10 shadow-lg md:order-2">
+                            <div class="w-1/2 h-0.5 bg-ink origin-left -rotate-45 transform group-hover:rotate-0 transition-transform duration-700"></div>
+                            <div class="absolute w-2 h-2 bg-ink rounded-full"></div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12 pl-16 w-full md:text-left md:order-3">
+                            <span class="text-4xl font-bold text-ink/20 group-hover:text-ink transition-colors duration-500">2023-2024</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <p>&copy; 2024 [Votre Nom]. Tous droits réservés.</p>
+        <!-- SECTION STACK -->
+        <section id="competences" class="py-24 bg-white border-b border-ink/10 relative">
+             <div class="absolute right-10 bottom-20 w-40 opacity-20 mix-blend-multiply pointer-events-none">
+                <img src="assets/images/transhumans/reading.png" alt="Graphic">
+            </div>
+
+            <div class="container mx-auto px-6">
+                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 pb-4">
+                    <span class="text-4xl font-bold">04.</span>
+                    <h2 class="text-xl uppercase tracking-widest">Stack Technique</h2>
                 </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="hover:text-blue-400 transition-colors">
-                        <i class="fab fa-linkedin text-xl"></i>
-                    </a>
-                    <a href="#" class="hover:text-gray-400 transition-colors">
-                        <i class="fab fa-github text-xl"></i>
-                    </a>
-                    <a href="#" class="hover:text-blue-400 transition-colors">
-                        <i class="fab fa-twitter text-xl"></i>
-                    </a>
-                    <a href="#" class="hover:text-pink-400 transition-colors">
-                        <i class="fab fa-instagram text-xl"></i>
-                    </a>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-lg border-l-4 border-accent pl-3">DÉVELOPPEMENT</h3>
+                        <div class="bg-paper p-6 border border-ink/10 hover:shadow-md transition-shadow">
+                            <ul class="space-y-3">
+                                <li class="flex justify-between items-center"><span>HTML5 / CSS3</span><i class="fab fa-html5 text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>JavaScript (ES6+)</span><i class="fab fa-js text-xl"></i></li>
+                                <li class="flex justify-between items-center font-bold"><span>Tailwind CSS</span><i class="fab fa-css3 text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>Python</span><i class="fab fa-python text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>PHP</span><i class="fab fa-php text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>Langage C</span><span class="font-bold text-xs border border-ink px-1">C</span></li>
+                                <li class="flex justify-between items-center"><span>SQL</span><i class="fas fa-database text-xl"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-lg border-l-4 border-pink-500 pl-3">GRAPHISME & UI</h3>
+                        <div class="bg-paper p-6 border border-ink/10 hover:shadow-md transition-shadow">
+                            <ul class="space-y-3">
+                                <li class="flex justify-between items-center"><span>Adobe Photoshop</span><i class="fas fa-image text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>Adobe Illustrator</span><i class="fas fa-pen-nib text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>Adobe InDesign</span><i class="fas fa-book-open text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>Canva</span><span class="font-bold text-xs border border-ink px-1">C</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-lg border-l-4 border-green-500 pl-3">OUTILS & ORGA</h3>
+                        <div class="bg-paper p-6 border border-ink/10 hover:shadow-md transition-shadow">
+                            <ul class="space-y-3">
+                                <li class="flex justify-between items-center"><span>Git & GitHub</span><i class="fab fa-github text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>VS Code</span><i class="fas fa-code text-xl"></i></li>
+                                <li class="flex justify-between items-center"><span>Notion</span><span class="font-bold text-xs border border-ink px-1">N</span></li>
+                                <li class="flex justify-between items-center"><span>Microsoft Office</span><i class="fas fa-file-word text-xl"></i></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
+
+        <!-- SECTION PROJETS (RÉINTÉGRÉE) -->
+        <section id="projets" class="py-24 bg-paper border-b border-ink/10 relative">
+            <div class="container mx-auto px-6">
+                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 pb-4">
+                    <span class="text-4xl font-bold">05.</span>
+                    <h2 class="text-xl uppercase tracking-widest">Travaux & Projets</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Projet 1 -->
+                    <div class="group cursor-pointer">
+                        <div class="border border-ink/10 p-2 bg-white overflow-hidden mb-4 relative">
+                            <div class="h-64 bg-gray-200 overflow-hidden">
+                                <!-- Remplace par une capture d'écran de ton projet -->
+                                <img src="https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?auto=format&fit=crop&w=800&q=80" alt="Projet 1" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                            </div>
+                            <!-- Badge Transhumans -->
+                            <div class="absolute bottom-4 right-4 w-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-multiply">
+                                <img src="assets/images/transhumans/walking-contradiction.png" alt="icon">
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold group-hover:text-accent transition-colors">Site E-commerce</h3>
+                        <p class="text-sm text-graphite mt-2 mb-3">Développement d'une boutique en ligne avec panier et paiement.</p>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] border border-ink px-2 py-1">REACT</span>
+                            <span class="text-[10px] border border-ink px-2 py-1">TAILWIND</span>
+                        </div>
+                    </div>
+
+                    <!-- Projet 2 -->
+                    <div class="group cursor-pointer">
+                        <div class="border border-ink/10 p-2 bg-white overflow-hidden mb-4 relative">
+                            <div class="h-64 bg-gray-200 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=800&q=80" alt="Projet 2" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold group-hover:text-accent transition-colors">Task Manager</h3>
+                        <p class="text-sm text-graphite mt-2 mb-3">Application de gestion de tâches type Trello.</p>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] border border-ink px-2 py-1">JS</span>
+                            <span class="text-[10px] border border-ink px-2 py-1">FIREBASE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER SCANNER (AVEC CARTES QUI DÉFILENT) -->
+    <footer id="footer-scanner" class="relative w-full h-[250px] bg-ink overflow-hidden border-t border-ink">
+        <div class="container-scanner relative w-full h-full flex items-center justify-center">
+            <!-- Les éléments nécessaires pour le JS -->
+            <div class="scanner"></div>
+            <div class="card-stream" id="cardStream">
+                <div class="card-line" id="cardLine"></div>
+            </div>
+        </div>
+        <div class="absolute bottom-2 w-full text-center text-gray-500 text-[10px] z-50 font-mono">
+            © 2026 ABDOULAYE BA • <a href="#" class="hover:text-white">GITHUB</a> • <a href="#" class="hover:text-white">LINKEDIN</a>
         </div>
     </footer>
 
