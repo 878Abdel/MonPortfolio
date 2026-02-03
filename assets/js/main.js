@@ -1,4 +1,27 @@
-// --- PARTIE 1 : PHOTO QUI SE REPLIE (LOGIQUE AJUSTÉE) ---
+// --- GESTION DU DARK MODE ---
+const themeToggleBtn = document.getElementById('theme-toggle');
+const htmlElement = document.documentElement;
+
+// Vérifier la préférence locale ou système au chargement
+if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    htmlElement.classList.add('dark');
+} else {
+    htmlElement.classList.remove('dark');
+}
+
+// Action au clic
+if(themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        htmlElement.classList.toggle('dark');
+        
+        // Sauvegarder la préférence
+        if (htmlElement.classList.contains('dark')) {
+            localStorage.theme = 'dark';
+        } else {
+            localStorage.theme = 'light';
+        }
+    });
+}// --- PARTIE 1 : PHOTO QUI SE REPLIE (LOGIQUE AJUSTÉE) ---
 const photoContainer = document.getElementById('photo-container');
 
 window.addEventListener('scroll', () => {

@@ -4,21 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio • Abdoulaye Ba</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Three.js est nécessaire pour le footer -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Version Locale (Hors ligne) -->
+    <script src="assets/js/tailwind.js"></script>
+    <script src="assets/js/three.min.js"></script>
+    <link rel="stylesheet" href="assets/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 
     <script>
         tailwind.config = {
+            darkMode: 'class', // Active le mode sombre manuel
             theme: {
                 extend: {
                     colors: {
                         'paper': '#f3f4f6',     
                         'ink': '#111111',       
                         'graphite': '#4b5563',  
-                        'accent': '#2563eb',    
+                        'accent': '#2563eb',
+                        // Couleurs spécifiques Dark Mode
+                        'dark-bg': '#050505',
+                        'dark-card': '#121212',
+                        'dark-text': '#e5e7eb'
                     },
                     fontFamily: {
                         'mono': ['DepartureMono', 'monospace'],
@@ -28,49 +34,58 @@
         }
     </script>
 </head>
-<body class="bg-paper text-ink font-mono overflow-x-hidden selection:bg-ink selection:text-white">
+<body class="bg-paper text-ink font-mono overflow-x-hidden selection:bg-ink selection:text-white dark:bg-dark-bg dark:text-dark-text dark:selection:bg-accent transition-colors duration-300">
 
-    <!-- TEXTURE DE FOND -->
-    <div class="fixed inset-0 pointer-events-none opacity-[0.04] z-0" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
+    <!-- TEXTURE DE FOND (S'inverse en mode sombre) -->
+    <div class="fixed inset-0 pointer-events-none opacity-[0.04] z-0 dark:invert" style="background-image: url('assets/images/texture.png');"></div>
 
     <!-- HEADER NAVIGATION -->
-    <header class="fixed top-0 w-full z-50 bg-paper/90 backdrop-blur-md border-b border-ink/10">
+    <header class="fixed top-0 w-full z-50 bg-paper/90 dark:bg-dark-bg/90 backdrop-blur-md border-b border-ink/10 dark:border-white/10 transition-colors duration-300">
         <div class="container mx-auto">
             <nav class="flex justify-between items-center h-16 px-6">
-                <!-- NOM COMPLET (Spécifique Header) -->
-                <div class="text-sm md:text-lg font-bold tracking-tighter border-2 border-ink px-3 py-1 bg-white hover:bg-ink hover:text-white transition-colors cursor-default">
+                <!-- NOM COMPLET -->
+                <div class="text-sm md:text-lg font-bold tracking-tighter border-2 border-ink dark:border-white px-3 py-1 bg-white dark:bg-dark-card hover:bg-ink hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-default">
                     ABDOULAYE ONOKOKO BA
                 </div>
                 
-                <ul class="hidden md:flex space-x-0 border-l border-ink/10">
-                    <li><a href="#accueil" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">01. Accueil</a></li>
-                    <li><a href="#profil" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">02. Profil</a></li>
-                    <li><a href="#parcours" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">03. Parcours</a></li>
-                    <li><a href="#competences" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">04. Stack</a></li>
-                    <li><a href="#projets" class="block px-6 py-5 hover:bg-ink hover:text-white transition-colors border-r border-ink/10 text-xs uppercase font-bold">05. Travaux</a></li>
-                </ul>
-                <button id="mobile-menu-btn" class="md:hidden text-xl"><i class="fas fa-bars"></i></button>
+                <div class="flex items-center">
+                    <!-- Menu Desktop -->
+                    <ul class="hidden md:flex space-x-0 border-l border-ink/10 dark:border-white/10 mr-6">
+                        <li><a href="#accueil" class="block px-6 py-5 hover:bg-ink hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors border-r border-ink/10 dark:border-white/10 text-xs uppercase font-bold">01. Accueil</a></li>
+                        <li><a href="#profil" class="block px-6 py-5 hover:bg-ink hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors border-r border-ink/10 dark:border-white/10 text-xs uppercase font-bold">02. Profil</a></li>
+                        <li><a href="#parcours" class="block px-6 py-5 hover:bg-ink hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors border-r border-ink/10 dark:border-white/10 text-xs uppercase font-bold">03. Parcours</a></li>
+                        <li><a href="#competences" class="block px-6 py-5 hover:bg-ink hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors border-r border-ink/10 dark:border-white/10 text-xs uppercase font-bold">04. Stack</a></li>
+                        <li><a href="#projets" class="block px-6 py-5 hover:bg-ink hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors border-r border-ink/10 dark:border-white/10 text-xs uppercase font-bold">05. Travaux</a></li>
+                    </ul>
+
+                    <!-- BOUTON DARK MODE -->
+                    <button id="theme-toggle" class="p-2 rounded-full border border-ink/20 dark:border-white/20 hover:bg-ink hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
+                        <i class="fas fa-moon dark:hidden"></i> <!-- Lune visible en mode clair -->
+                        <i class="fas fa-sun hidden dark:block"></i> <!-- Soleil visible en mode sombre -->
+                    </button>
+
+                    <!-- Bouton Mobile -->
+                    <button id="mobile-menu-btn" class="md:hidden text-xl ml-4"><i class="fas fa-bars"></i></button>
+                </div>
             </nav>
         </div>
     </header>
 
-    <!-- SECTION PHOTO (Rétractable - TAILLE AUGMENTÉE) -->
-    <div id="photo-container" class="mt-16 w-full bg-white border-b border-ink/10 overflow-hidden transition-all duration-300 relative z-10">
+    <!-- SECTION PHOTO -->
+    <div id="photo-container" class="mt-16 w-full bg-white dark:bg-dark-card border-b border-ink/10 dark:border-white/10 overflow-hidden transition-all duration-300 relative z-10">
         <div class="container mx-auto py-8 flex flex-col items-center justify-center">
-            <div class="relative p-2 border border-ink/20 bg-paper shadow-lg transform rotate-1 hover:rotate-0 transition-transform duration-500">
-                <!-- Dimensions augmentées ici : w-48 h-64 (mobile) et w-64 h-80 (desktop) -->
+            <div class="relative p-2 border border-ink/20 dark:border-white/20 bg-paper dark:bg-dark-bg shadow-lg transform rotate-1 hover:rotate-0 transition-transform duration-500">
                 <div class="w-48 h-64 md:w-64 md:h-80 overflow-hidden bg-gray-200 relative">
                     <img src="assets/images/me.jpg" alt="Portrait" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                    <!-- Overlay Scanline -->
                     <div class="absolute inset-0 bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAADCAYAAABS3WWCAAAAE0lEQVQIW2NkYGD4zwABjFAQAwAwMQH/2OC5CAAAAABJRU5ErkJggg==')] opacity-20 pointer-events-none"></div>
                 </div>
                 <div class="mt-2 flex justify-between items-end">
                     <div>
-                        <p class="text-[10px] text-graphite uppercase">Role</p>
+                        <p class="text-[10px] text-graphite dark:text-gray-400 uppercase">Role</p>
                         <p class="text-xs font-bold">FRONTEND DEV</p>
                     </div>
                     <div class="text-right">
-                        <p class="text-[10px] text-graphite uppercase">ID</p>
+                        <p class="text-[10px] text-graphite dark:text-gray-400 uppercase">ID</p>
                         <p class="text-xs font-bold">SN-2026</p>
                     </div>
                 </div>
@@ -81,73 +96,73 @@
     <main class="relative z-10">
         
         <!-- SECTION HERO -->
-        <section id="accueil" class="min-h-[70vh] flex items-center relative border-b border-ink/10 bg-paper overflow-hidden">
-            <div class="absolute right-0 bottom-0 w-1/2 md:w-1/3 opacity-80 mix-blend-multiply pointer-events-none z-0">
-                <img src="assets/images/transhumans/waiting.png" alt="Graphic" class="w-full h-auto">
+        <section id="accueil" class="min-h-[70vh] flex items-center relative border-b border-ink/10 dark:border-white/10 bg-paper dark:bg-dark-bg overflow-hidden transition-colors duration-300">
+            <div class="absolute right-0 bottom-0 w-1/2 md:w-1/3 opacity-80 mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0 dark:opacity-30">
+                <img src="assets/images/transhumans/waiting.png" alt="Graphic" class="w-full h-auto dark:invert">
             </div>
 
             <div class="container mx-auto px-6 relative z-10">
                 <div class="max-w-3xl">
-                    <div class="inline-block bg-ink text-white text-xs px-2 py-1 mb-6 uppercase tracking-widest">
+                    <div class="inline-block bg-ink dark:bg-white text-white dark:text-black text-xs px-2 py-1 mb-6 uppercase tracking-widest font-bold">
                         Étudiant & Développeur Web
                     </div>
                     <h1 class="text-5xl md:text-8xl font-bold mb-8 leading-none tracking-tighter">
                         CONCEVOIR<br>
                         L'INTERFACE<br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-ink to-gray-500">DE DEMAIN.</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-ink to-gray-500 dark:from-white dark:to-gray-400">DE DEMAIN.</span>
                     </h1>
-                    <p class="text-lg text-graphite max-w-lg leading-relaxed bg-paper/80 backdrop-blur-sm p-4 border-l-2 border-ink">
-                        Je suis <span class="font-bold text-ink">Abdoulaye Ba</span>. Je transforme des concepts complexes en interfaces web fluides, performantes et minimalistes.
+                    <p class="text-lg text-graphite dark:text-gray-400 max-w-lg leading-relaxed bg-paper/80 dark:bg-dark-bg/80 backdrop-blur-sm p-4 border-l-2 border-ink dark:border-white">
+                        Je suis <span class="font-bold text-ink dark:text-white">Abdoulaye Ba</span>. Je transforme des concepts complexes en interfaces web fluides, performantes et minimalistes.
                     </p>
                     <div class="mt-10 flex gap-4">
-                        <a href="#projets" class="px-8 py-4 bg-ink text-white text-sm hover:bg-accent transition-colors font-bold">VOIR MES PROJETS</a>
+                        <a href="#projets" class="px-8 py-4 bg-ink dark:bg-white text-white dark:text-black text-sm hover:bg-accent dark:hover:bg-accent hover:text-white transition-colors font-bold">VOIR MES PROJETS</a>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- SECTION PROFIL -->
-        <section id="profil" class="py-24 bg-white border-b border-ink/10 relative">
-            <div class="absolute left-10 top-20 w-32 opacity-20 mix-blend-multiply pointer-events-none">
+        <section id="profil" class="py-24 bg-white dark:bg-dark-card border-b border-ink/10 dark:border-white/10 relative transition-colors duration-300">
+            <div class="absolute left-10 top-20 w-32 opacity-20 mix-blend-multiply dark:mix-blend-screen pointer-events-none dark:invert">
                 <img src="assets/images/transhumans/growth.png" alt="Graphic">
             </div>
 
             <div class="container mx-auto px-6">
-                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 pb-4">
+                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 dark:border-white/10 pb-4">
                     <span class="text-4xl font-bold">02.</span>
                     <h2 class="text-xl uppercase tracking-widest">Fiche Profil</h2>
                 </div>
 
                 <div class="grid md:grid-cols-12 gap-12">
-                    <div class="md:col-span-7 space-y-6 text-graphite text-justify">
-                        <p class="text-xl text-ink font-bold">"La rigueur du code au service de la créativité."</p>
+                    <div class="md:col-span-7 space-y-6 text-graphite dark:text-gray-400 text-justify">
+                        <p class="text-xl text-ink dark:text-white font-bold">"La rigueur du code au service de la créativité."</p>
                         <p>Passionné par la Tech, je combine mes études avec une pratique intensive du développement web. Mon objectif est de maîtriser l'ensemble de la chaîne de production, de la conception graphique (UI) à l'intégration technique.</p>
                         <p>Curieux et autodidacte, j'explore constamment de nouvelles technologies pour rester à jour dans un domaine en perpétuelle évolution.</p>
                     </div>
 
                     <div class="md:col-span-5">
-                        <div class="border-2 border-ink p-1 bg-paper">
-                            <div class="bg-white border border-ink/20 p-6">
-                                <h3 class="font-bold mb-6 border-b-2 border-ink pb-2 inline-block">DONNÉES PERSONNELLES</h3>
+                        <div class="border-2 border-ink dark:border-white p-1 bg-paper dark:bg-dark-bg">
+                            <div class="bg-white dark:bg-dark-card border border-ink/20 dark:border-white/20 p-6">
+                                <h3 class="font-bold mb-6 border-b-2 border-ink dark:border-white pb-2 inline-block">DONNÉES PERSONNELLES</h3>
                                 <div class="space-y-4">
-                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 pb-2">
-                                        <span class="text-xs text-graphite uppercase">Nom Complet</span>
+                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 dark:border-gray-700 pb-2">
+                                        <span class="text-xs text-graphite dark:text-gray-500 uppercase">Nom Complet</span>
                                         <span class="font-bold">Abdoulaye Ba</span>
                                     </div>
-                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 pb-2">
-                                        <span class="text-xs text-graphite uppercase">Date de Naissance</span>
+                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 dark:border-gray-700 pb-2">
+                                        <span class="text-xs text-graphite dark:text-gray-500 uppercase">Date de Naissance</span>
                                         <span class="font-bold">11 Mars 2006</span>
                                     </div>
-                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 pb-2">
-                                        <span class="text-xs text-graphite uppercase">Âge</span>
+                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 dark:border-gray-700 pb-2">
+                                        <span class="text-xs text-graphite dark:text-gray-500 uppercase">Âge</span>
                                         <span class="font-bold">19 Ans</span>
                                     </div>
-                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 pb-2">
-                                        <span class="text-xs text-graphite uppercase">Nationalité</span>
+                                    <div class="flex items-center justify-between border-b border-dashed border-gray-300 dark:border-gray-700 pb-2">
+                                        <span class="text-xs text-graphite dark:text-gray-500 uppercase">Nationalité</span>
                                         <span class="font-bold">Sénégalaise</span>
                                     </div>
                                     <div class="flex items-center justify-between pt-2">
-                                        <span class="text-xs text-graphite uppercase">Statut</span>
+                                        <span class="text-xs text-graphite dark:text-gray-500 uppercase">Statut</span>
                                         <span class="font-bold text-accent">Étudiant / Developpeur</span>
                                     </div>
                                 </div>
@@ -159,30 +174,30 @@
         </section>
 
         <!-- SECTION PARCOURS -->
-        <section id="parcours" class="py-24 bg-paper border-b border-ink/10 overflow-hidden">
+        <section id="parcours" class="py-24 bg-paper dark:bg-dark-bg border-b border-ink/10 dark:border-white/10 overflow-hidden transition-colors duration-300">
             <div class="container mx-auto px-6">
-                <div class="flex items-baseline gap-4 mb-16 border-b border-ink/10 pb-4">
+                <div class="flex items-baseline gap-4 mb-16 border-b border-ink/10 dark:border-white/10 pb-4">
                     <span class="text-4xl font-bold">03.</span>
                     <h2 class="text-xl uppercase tracking-widest">Parcours</h2>
                 </div>
 
                 <div class="relative max-w-4xl mx-auto">
-                    <div class="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-px bg-ink/30 md:-translate-x-1/2"></div>
+                    <div class="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-px bg-ink/30 dark:bg-white/30 md:-translate-x-1/2"></div>
 
                     <!-- Item 1 -->
                     <div class="relative flex flex-col md:flex-row items-center mb-16 group">
                         <div class="md:w-1/2 md:pr-12 md:text-right pl-16 md:pl-0 mb-4 md:mb-0 w-full">
-                            <span class="text-4xl font-bold text-ink/20 group-hover:text-ink transition-colors duration-500">2025-2026</span>
+                            <span class="text-4xl font-bold text-ink/20 dark:text-white/20 group-hover:text-ink dark:group-hover:text-white transition-colors duration-500">2025-2026</span>
                         </div>
-                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 bg-paper border-2 border-ink rounded-full flex items-center justify-center z-10 shadow-lg">
-                            <div class="w-1/2 h-0.5 bg-ink origin-left rotate-45 transform group-hover:rotate-180 transition-transform duration-700"></div>
-                            <div class="absolute w-2 h-2 bg-ink rounded-full"></div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 bg-paper dark:bg-dark-bg border-2 border-ink dark:border-white rounded-full flex items-center justify-center z-10 shadow-lg">
+                            <div class="w-1/2 h-0.5 bg-ink dark:bg-white origin-left rotate-45 transform group-hover:rotate-180 transition-transform duration-700"></div>
+                            <div class="absolute w-2 h-2 bg-ink dark:bg-white rounded-full"></div>
                         </div>
                         <div class="md:w-1/2 md:pl-12 pl-16 w-full">
-                            <div class="bg-white p-6 border border-ink/10 hover:border-ink transition-all shadow-sm">
+                            <div class="bg-white dark:bg-dark-card p-6 border border-ink/10 dark:border-white/10 hover:border-ink dark:hover:border-white transition-all shadow-sm">
                                 <h3 class="font-bold text-lg">Licence 2 en Genie Informatique</h3>
                                 <p class="text-sm text-accent mb-2">Unipro</p>
-                                <p class="text-xs text-graphite">En cours d'acquisition.</p>
+                                <p class="text-xs text-graphite dark:text-gray-400">En cours d'acquisition.</p>
                             </div>
                         </div>
                     </div>
@@ -190,34 +205,35 @@
                     <!-- Item 2 -->
                     <div class="relative flex flex-col md:flex-row items-center mb-16 group">
                         <div class="md:w-1/2 md:pr-12 md:text-right pl-16 md:pl-0 mb-4 md:mb-0 w-full md:order-1">
-                            <div class="bg-white p-6 border border-ink/10 hover:border-ink transition-all shadow-sm">
+                            <div class="bg-white dark:bg-dark-card p-6 border border-ink/10 dark:border-white/10 hover:border-ink dark:hover:border-white transition-all shadow-sm">
                                 <h3 class="font-bold text-lg">Licence 1 Genie informatique</h3>
                                 <p class="text-sm text-accent mb-2">Unipro</p>
-                                <p class="text-xs text-graphite">Validé.</p>
+                                <p class="text-xs text-graphite dark:text-gray-400">Validé.</p>
                             </div>
                         </div>
-                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 bg-paper border-2 border-ink rounded-full flex items-center justify-center z-10 shadow-lg md:order-2">
-                            <div class="w-1/2 h-0.5 bg-ink origin-left -rotate-45 transform group-hover:rotate-0 transition-transform duration-700"></div>
-                            <div class="absolute w-2 h-2 bg-ink rounded-full"></div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 bg-paper dark:bg-dark-bg border-2 border-ink dark:border-white rounded-full flex items-center justify-center z-10 shadow-lg md:order-2">
+                            <div class="w-1/2 h-0.5 bg-ink dark:bg-white origin-left -rotate-45 transform group-hover:rotate-0 transition-transform duration-700"></div>
+                            <div class="absolute w-2 h-2 bg-ink dark:bg-white rounded-full"></div>
                         </div>
                         <div class="md:w-1/2 md:pl-12 pl-16 w-full md:text-left md:order-3">
-                            <span class="text-4xl font-bold text-ink/20 group-hover:text-ink transition-colors duration-500">2024-2025</span>
+                            <span class="text-4xl font-bold text-ink/20 dark:text-white/20 group-hover:text-ink dark:group-hover:text-white transition-colors duration-500">2024-2025</span>
                         </div>
                     </div>
-                <!-- Item 3 -->
+
+                    <!-- Item 3 -->
                     <div class="relative flex flex-col md:flex-row items-center mb-16 group">
                         <div class="md:w-1/2 md:pr-12 md:text-right pl-16 md:pl-0 mb-4 md:mb-0 w-full">
-                            <span class="text-4xl font-bold text-ink/20 group-hover:text-ink transition-colors duration-500">2023-2024</span>
+                            <span class="text-4xl font-bold text-ink/20 dark:text-white/20 group-hover:text-ink dark:group-hover:text-white transition-colors duration-500">2023-2024</span>
                         </div>
-                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 bg-paper border-2 border-ink rounded-full flex items-center justify-center z-10 shadow-lg">
-                            <div class="w-1/2 h-0.5 bg-ink origin-left rotate-45 transform group-hover:rotate-180 transition-transform duration-700"></div>
-                            <div class="absolute w-2 h-2 bg-ink rounded-full"></div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 bg-paper dark:bg-dark-bg border-2 border-ink dark:border-white rounded-full flex items-center justify-center z-10 shadow-lg">
+                            <div class="w-1/2 h-0.5 bg-ink dark:bg-white origin-left rotate-45 transform group-hover:rotate-180 transition-transform duration-700"></div>
+                            <div class="absolute w-2 h-2 bg-ink dark:bg-white rounded-full"></div>
                         </div>
                         <div class="md:w-1/2 md:pl-12 pl-16 w-full">
-                            <div class="bg-white p-6 border border-ink/10 hover:border-ink transition-all shadow-sm">
+                            <div class="bg-white dark:bg-dark-card p-6 border border-ink/10 dark:border-white/10 hover:border-ink dark:hover:border-white transition-all shadow-sm">
                                 <h3 class="font-bold text-lg">Baccalaureat Scientifique</h3>
                                 <p class="text-sm text-accent mb-2">Lycée Leopold Sedar Senghor</p>
-                                <p class="text-xs text-graphite">Acquise.</p>
+                                <p class="text-xs text-graphite dark:text-gray-400">Acquise.</p>
                             </div>
                         </div>
                     </div>
@@ -226,13 +242,13 @@
         </section>
 
         <!-- SECTION STACK -->
-        <section id="competences" class="py-24 bg-white border-b border-ink/10 relative">
-             <div class="absolute right-10 bottom-20 w-40 opacity-20 mix-blend-multiply pointer-events-none">
+        <section id="competences" class="py-24 bg-white dark:bg-dark-card border-b border-ink/10 dark:border-white/10 relative transition-colors duration-300">
+             <div class="absolute right-10 bottom-20 w-40 opacity-20 mix-blend-multiply dark:mix-blend-screen pointer-events-none dark:invert">
                 <img src="assets/images/transhumans/whoa.png" alt="Graphic">
             </div>
 
             <div class="container mx-auto px-6">
-                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 pb-4">
+                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 dark:border-white/10 pb-4">
                     <span class="text-4xl font-bold">04.</span>
                     <h2 class="text-xl uppercase tracking-widest">Stack Technique</h2>
                 </div>
@@ -240,36 +256,36 @@
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="space-y-4">
                         <h3 class="font-bold text-lg border-l-4 border-accent pl-3">DÉVELOPPEMENT</h3>
-                        <div class="bg-paper p-6 border border-ink/10 hover:shadow-md transition-shadow">
+                        <div class="bg-paper dark:bg-dark-bg p-6 border border-ink/10 dark:border-white/10 hover:shadow-md transition-shadow">
                             <ul class="space-y-3">
                                 <li class="flex justify-between items-center"><span>HTML5 / CSS3</span><i class="fab fa-html5 text-xl"></i></li>
                                 <li class="flex justify-between items-center"><span>JavaScript (ES6+)</span><i class="fab fa-js text-xl"></i></li>
                                 <li class="flex justify-between items-center font-bold"><span>Tailwind CSS</span><i class="fab fa-css3 text-xl"></i></li>
                                 <li class="flex justify-between items-center"><span>Python</span><i class="fab fa-python text-xl"></i></li>
                                 <li class="flex justify-between items-center"><span>PHP</span><i class="fab fa-php text-xl"></i></li>
-                                <li class="flex justify-between items-center"><span>Langage C</span><span class="font-bold text-xs border border-ink px-1">C</span></li>
+                                <li class="flex justify-between items-center"><span>Langage C</span><span class="font-bold text-xs border border-ink dark:border-white px-1">C</span></li>
                                 <li class="flex justify-between items-center"><span>SQL</span><i class="fas fa-database text-xl"></i></li>
                             </ul>
                         </div>
                     </div>
                     <div class="space-y-4">
                         <h3 class="font-bold text-lg border-l-4 border-pink-500 pl-3">GRAPHISME & UI</h3>
-                        <div class="bg-paper p-6 border border-ink/10 hover:shadow-md transition-shadow">
+                        <div class="bg-paper dark:bg-dark-bg p-6 border border-ink/10 dark:border-white/10 hover:shadow-md transition-shadow">
                             <ul class="space-y-3">
                                 <li class="flex justify-between items-center"><span>Adobe Photoshop</span><i class="fas fa-image text-xl"></i></li>
                                 <li class="flex justify-between items-center"><span>Adobe Illustrator</span><i class="fas fa-pen-nib text-xl"></i></li>
                                 <li class="flex justify-between items-center"><span>Adobe InDesign</span><i class="fas fa-book-open text-xl"></i></li>
-                                <li class="flex justify-between items-center"><span>Canva</span><span class="font-bold text-xs border border-ink px-1">C</span></li>
+                                <li class="flex justify-between items-center"><span>Canva</span><span class="font-bold text-xs border border-ink dark:border-white px-1">C</span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="space-y-4">
                         <h3 class="font-bold text-lg border-l-4 border-green-500 pl-3">OUTILS & ORGA</h3>
-                        <div class="bg-paper p-6 border border-ink/10 hover:shadow-md transition-shadow">
+                        <div class="bg-paper dark:bg-dark-bg p-6 border border-ink/10 dark:border-white/10 hover:shadow-md transition-shadow">
                             <ul class="space-y-3">
                                 <li class="flex justify-between items-center"><span>Git & GitHub</span><i class="fab fa-github text-xl"></i></li>
                                 <li class="flex justify-between items-center"><span>VS Code</span><i class="fas fa-code text-xl"></i></li>
-                                <li class="flex justify-between items-center"><span>Notion</span><span class="font-bold text-xs border border-ink px-1">N</span></li>
+                                <li class="flex justify-between items-center"><span>Notion</span><span class="font-bold text-xs border border-ink dark:border-white px-1">N</span></li>
                                 <li class="flex justify-between items-center"><span>Microsoft Office</span><i class="fas fa-file-word text-xl"></i></li>
                             </ul>
                         </div>
@@ -278,10 +294,10 @@
             </div>
         </section>
 
-        <!-- SECTION PROJETS (RÉINTÉGRÉE) -->
-        <section id="projets" class="py-24 bg-paper border-b border-ink/10 relative">
+        <!-- SECTION PROJETS (AVEC VIDÉOS) -->
+        <section id="projets" class="py-24 bg-paper dark:bg-dark-bg border-b border-ink/10 dark:border-white/10 relative transition-colors duration-300">
             <div class="container mx-auto px-6">
-                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 pb-4">
+                <div class="flex items-baseline gap-4 mb-12 border-b border-ink/10 dark:border-white/10 pb-4">
                     <span class="text-4xl font-bold">05.</span>
                     <h2 class="text-xl uppercase tracking-widest">Travaux & Projets</h2>
                 </div>
@@ -289,36 +305,43 @@
                 <div class="grid md:grid-cols-2 gap-12">
                     <!-- Projet 1 -->
                     <div class="group cursor-pointer">
-                        <div class="border border-ink/10 p-2 bg-white overflow-hidden mb-4 relative">
-                            <div class="h-64 bg-gray-200 overflow-hidden">
-                                <!-- Remplace par une capture d'écran de ton projet -->
-                                <img src="https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?auto=format&fit=crop&w=800&q=80" alt="Projet 1" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="border border-ink/10 dark:border-white/10 p-2 bg-white dark:bg-dark-card overflow-hidden mb-4 relative">
+                            <div class="h-64 bg-gray-900 overflow-hidden relative">
+                                <!-- VIDÉO ICI -->
+                                <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500">
+                                    <source src="assets/videos/projet1.mp4" type="video/mp4">
+                                    <!-- Fallback -->
+                                    Votre navigateur ne supporte pas la vidéo.
+                                </video>
                             </div>
                             <!-- Badge Transhumans -->
-                            <div class="absolute bottom-4 right-4 w-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-multiply">
+                            <div class="absolute bottom-4 right-4 w-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-multiply dark:mix-blend-screen dark:invert">
                                 <img src="assets/images/transhumans/walking-contradiction.png" alt="icon">
                             </div>
                         </div>
                         <h3 class="text-2xl font-bold group-hover:text-accent transition-colors">Site E-commerce</h3>
-                        <p class="text-sm text-graphite mt-2 mb-3">Développement d'une boutique en ligne avec panier et paiement.</p>
+                        <p class="text-sm text-graphite dark:text-gray-400 mt-2 mb-3">Développement d'une boutique en ligne avec panier et paiement.</p>
                         <div class="flex gap-2">
-                            <span class="text-[10px] border border-ink px-2 py-1">REACT</span>
-                            <span class="text-[10px] border border-ink px-2 py-1">TAILWIND</span>
+                            <span class="text-[10px] border border-ink dark:border-white px-2 py-1">REACT</span>
+                            <span class="text-[10px] border border-ink dark:border-white px-2 py-1">TAILWIND</span>
                         </div>
                     </div>
 
                     <!-- Projet 2 -->
                     <div class="group cursor-pointer">
-                        <div class="border border-ink/10 p-2 bg-white overflow-hidden mb-4 relative">
-                            <div class="h-64 bg-gray-200 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=800&q=80" alt="Projet 2" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="border border-ink/10 dark:border-white/10 p-2 bg-white dark:bg-dark-card overflow-hidden mb-4 relative">
+                            <div class="h-64 bg-gray-900 overflow-hidden relative">
+                                <!-- VIDÉO ICI -->
+                                <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500">
+                                    <source src="assets/videos/projet2.mp4" type="video/mp4">
+                                </video>
                             </div>
                         </div>
                         <h3 class="text-2xl font-bold group-hover:text-accent transition-colors">Task Manager</h3>
-                        <p class="text-sm text-graphite mt-2 mb-3">Application de gestion de tâches type Trello.</p>
+                        <p class="text-sm text-graphite dark:text-gray-400 mt-2 mb-3">Application de gestion de tâches type Trello.</p>
                         <div class="flex gap-2">
-                            <span class="text-[10px] border border-ink px-2 py-1">JS</span>
-                            <span class="text-[10px] border border-ink px-2 py-1">FIREBASE</span>
+                            <span class="text-[10px] border border-ink dark:border-white px-2 py-1">JS</span>
+                            <span class="text-[10px] border border-ink dark:border-white px-2 py-1">FIREBASE</span>
                         </div>
                     </div>
                 </div>
@@ -327,10 +350,9 @@
 
     </main>
 
-    <!-- FOOTER SCANNER (AVEC CARTES QUI DÉFILENT) -->
-    <footer id="footer-scanner" class="relative w-full h-[250px] bg-ink overflow-hidden border-t border-ink">
+    <!-- FOOTER SCANNER -->
+    <footer id="footer-scanner" class="relative w-full h-[250px] bg-ink dark:bg-black overflow-hidden border-t border-ink dark:border-white">
         <div class="container-scanner relative w-full h-full flex items-center justify-center">
-            <!-- Les éléments nécessaires pour le JS -->
             <div class="scanner"></div>
             <div class="card-stream" id="cardStream">
                 <div class="card-line" id="cardLine"></div>
