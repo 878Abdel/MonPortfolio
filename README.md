@@ -138,4 +138,4 @@ Les contributions sont les bienvenues! N'hésitez pas à faire un fork et propos
 
 ---
 
-**Créé avec ❤️ par [Votre Nom]**
+**Créé avec ❤️ par Abdoulayeee Ba
